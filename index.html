@@ -1,28 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>DevBay Assistant</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DevBay Chatbot — Word-by-Word Answer</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <main class="app">
+    <header>
+      <h1>DevBay Chatbot</h1>
+    </header>
 
-    <!-- Chatbot Icon -->
-    <div id="chatbot-icon" onclick="toggleChat()">💬</div>
+    <section class="chat-area" id="chatArea" aria-live="polite"></section>
 
-    <!-- Chatbot Container -->
-    <div id="chatbot-container">
-        <div id="chat-header">
-            <span>DevBay Assistant</span>
-            <button onclick="toggleChat()">✖</button>
-        </div>
-        <div id="chat-messages"></div>
-        <div id="chat-input-container">
-            <input type="text" id="chat-input" placeholder="Ask about DevBay...">
-            <button onclick="sendMessage()">Send</button>
-        </div>
-    </div>
+    <form id="inputForm" class="input-area" autocomplete="off">
+      <input id="userInput" type="text" placeholder="Ask something..." required />
+      <button type="submit">Send</button>
+    </form>
 
-    <script src="script.js"></script>
+    <footer class="note">
+      <small>Mode: <span id="modeName">client-side animation</span></small>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
+>
