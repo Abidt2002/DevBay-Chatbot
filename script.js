@@ -1,4 +1,4 @@
-// ========== DEVBay Chatbot (Smart Offline Version) ==========
+// ========== DEVBay Chatbot ==========
 
 // ---- QA DATA ----
 const qaPairs = [
@@ -9,33 +9,30 @@ const qaPairs = [
   ["what is devbay vision", "DevBay’s vision is to become a global leader in intelligent automation and enterprise technology services."],
   ["what is devbay contact email", "You can contact DevBay via email at info@devbay.ai."],
   ["what is devbay phone number", "DevBay’s official phone number is +92 300 1234567."],
-  ["what services does devbay offer", "DevBay offers Web, App, and Software Development, Cloud Solutions, Data Analytics, Cybersecurity, and AI-powered systems. We also provide ready-made software like CRM, ERP, LMS, HMS, SMS, and RMS."],
-  ["what is devbay crm", "DevBay CRM is an intelligent system that helps businesses manage customers, leads, and sales in one platform."],
-  ["what is devbay restaurant management system", "DevBay RMS simplifies restaurant operations with features like order management, billing, reservations, inventory, and staff scheduling."],
-  ["what is devbay school management system", "DevBay SMS is a complete school management solution for attendance, grading, parent communication, and performance tracking."],
-  ["what is devbay lms", "DevBay LMS is a Learning Management System for online education, employee training, and course management."],
-  ["what is devbay hospital management system", "DevBay HMS helps hospitals manage patient data, appointments, billing, and electronic medical records efficiently."],
-  ["what is devbay property management system", "DevBay PMS automates real estate operations like rent billing, maintenance requests, and tenant tracking."]
+  ["what services does devbay offer", "DevBay offers Web, App, and Software Development, Cloud Solutions, Data Analytics, Cybersecurity, and AI-powered systems. We also provide ready-made software like CRM, ERP, LMS, HMS, SMS, and RMS."]
 ];
 
 // ---- ELEMENTS ----
+const chatBox = document.getElementById("chat-box");
 const sendBtn = document.getElementById("send-btn");
 const userInput = document.getElementById("user-input");
-const chatBox = document.getElementById("chat-box");
 
 sendBtn.addEventListener("click", handleUserMessage);
 userInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") handleUserMessage();
 });
 
-// ---- HANDLE USER ----
+// ---- HANDLE MESSAGE ----
 function handleUserMessage() {
   const msg = userInput.value.trim();
   if (!msg) return;
+
   appendMessage("user", msg);
   userInput.value = "";
-  const reply = getBestMatchReply(msg);
-  showBotMessageAnimated(reply);
+  setTimeout(() => {
+    const reply = getBestMatchReply(msg);
+    showBotMessageAnimated(reply);
+  }, 500);
 }
 
 // ---- APPEND MESSAGE ----
@@ -48,7 +45,7 @@ function appendMessage(sender, text) {
   return div;
 }
 
-// ---- BOT TYPING EFFECT ----
+// ---- TYPING ANIMATION ----
 async function showBotMessageAnimated(fullText) {
   const botDiv = appendMessage("bot", "");
   const words = fullText.split(" ");
@@ -59,7 +56,7 @@ async function showBotMessageAnimated(fullText) {
   }
 }
 
-// ---- GET BEST MATCH ----
+// ---- FIND BEST MATCH ----
 function getBestMatchReply(userMsg) {
   const cleaned = userMsg.toLowerCase().replace(/[^\w\s]/gi, "");
   let bestScore = 0;
@@ -69,4 +66,16 @@ function getBestMatchReply(userMsg) {
     const score = stringSimilarity(cleaned, q);
     if (score > bestScore) {
       bestScore = score;
+      bestAnswer = a;
+    }
+  }
+  return bestScore > 0.4 ? bestAnswer : "Thanks for your message! Our AI assistant will get back with more details soon.";
+}
+
+// ---- FUZZY SIMILARITY ----
+function stringSimilarity(a, b) {
+  const longer = a.length > b.length ? a : b;
+  const shorter = a.length > b.length ? b : a;
+  const longerLe
+
 
