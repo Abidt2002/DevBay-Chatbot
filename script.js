@@ -4,11 +4,6 @@ const sendBtn = document.getElementById("send-btn");
 
 // Predefined DevBay Answers
 const responses = {
-  "what is devbay": "DevBay is a full-service IT and AI solutions company dedicated to transforming businesses through innovation, technology, and intelligent systems.",
-  "devbay vision": "To revolutionize global industries with intelligent, automated, and scalable technology solutions that empower businesses to thrive in the digital era.",
-  "devbay contact email": "You can reach DevBay at contact@devbaytech.com for any inquiries or collaborations.",
-  "devbay phone number": "DevBay's official contact number is +92 300 1234567.",
-  "headquarters": "DevBay’s headquarters are located in Karachi and Islamabad, serving clients in UAE, USA, Canada, and Saudi Arabia."
   "what is devbay": "DevBay Technologies is a global IT company that builds modern digital solutions, software, and automation systems to empower businesses worldwide.",
   "where is devbay located": "DevBay operates globally with key offices in Pakistan, the Middle East, the United Kingdom, and North America.",
   "what services devbay provide": "DevBay offers App Development, Software Development, Data Analysis, Cyber Security, Cloud Solutions, SEO, Call Center Services, and Game Development.",
