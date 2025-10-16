@@ -86,5 +86,92 @@ const qaPairs = [
 // -------------------------
 const userInput = document.getElementById("userInput");
 const chatContainer = document.getElementById("chatContainer");
-const sendBtn = document.getElement
+const sendBtn = document.getElementById("sendBtn");
+
+// -------------------------
+// Helper: Normalize text
+// -------------------------
+function normalize(text) {
+  return text.toLowerCase().replace(/[^\w\s]/gi, "").trim();
+}
+
+// -------------------------
+// Helper: Find best match
+// -------------------------
+function findAnswer(input) {
+  const normalizedInput = normalize(input);
+  console.log("User input normalized:", normalizedInput);
+
+  // 1. Exact match first
+  let exact = qaPairs.find(qa => normalize(qa.q) === normalizedInput);
+  if (exact) {
+    console.log("Exact match found:", exact.q);
+    return exact.a;
+  }
+
+  // 2. Partial/fuzzy match using token inclusion
+  const inputTokens = normalizedInput.split(" ");
+  let bestMatch = null;
+  let bestScore = 0;
+
+  qaPairs.forEach(qa => {
+    const qaTokens = normalize(qa.q).split(" ");
+    let score = qaTokens.filter(t => inputTokens.includes(t)).length;
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = qa;
+    }
+  });
+
+  if (bestScore > 0) {
+    console.log("Partial match found:", bestMatch.q, "Score:", bestScore);
+    return bestMatch.a;
+  }
+
+  console.log("No match found");
+  return "Thanks for your message! Our AI assistant will get back with more details soon.";
+}
+
+// -------------------------
+// Helper: Animate answer typing
+// -------------------------
+function animateAnswer(text) {
+  const p = document.createElement("p");
+  p.className = "botMessage";
+  chatContainer.appendChild(p);
+
+  const words = text.split(" ");
+  let i = 0;
+
+  function typeWord() {
+    if (i < words.length) {
+      p.textContent += (i === 0 ? "" : " ") + words[i];
+      i++;
+      setTimeout(typeWord, 100); // typing speed
+    }
+  }
+  typeWord();
+}
+
+// -------------------------
+// Event listener
+// -------------------------
+sendBtn.addEventListener("click", () => {
+  const userText = userInput.value.trim();
+  if (!userText) return;
+
+  // Add user message to chat
+  const userMsg = document.createElement("p");
+  userMsg.className = "userMessage";
+  userMsg.textContent = userText;
+  chatContainer.appendChild(userMsg);
+
+  userInput.value = "";
+
+  // Find answer
+  const answer = findAnswer(userText);
+
+  // Animate bot response
+  animateAnswer(answer);
+});
 
