@@ -1,57 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevBay Chatbot</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevBay Chatbot</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ========================
-     Floating Chat Button
-======================== -->
+<!-- Floating Chat Button -->
 <div id="chat-button">
-    <img src="chat-icon.png" alt="Chat">
+    <img src="chat-icon.png" alt="Chat" style="width:40px;height:40px;">
 </div>
 
-<!-- ========================
-     Chat Popup
-======================== -->
+<!-- Chat Popup -->
 <div id="chat-box">
     <div id="chat-header">
         DevBay Assistant
         <span id="close-chat">&#10005;</span>
     </div>
-    <div id="chat-body" class="chat-body">
+    <div id="chat-body">
         <!-- Messages will appear here -->
     </div>
     <div id="chat-input-container">
-        <input type="text" id="chat-input" placeholder="Type your question...">
-        <button id="send-btn">Send</button>
+        <input type="text" id="userInput" placeholder="Type your question...">
+        <button id="sendBtn">Send</button>
     </div>
 </div>
 
 <script src="script.js"></script>
 <script>
-    // ========================
     // Popup open/close logic
-    // ========================
     const chatButton = document.getElementById("chat-button");
     const chatBox = document.getElementById("chat-box");
     const closeChat = document.getElementById("close-chat");
 
     chatButton.addEventListener("click", () => {
-        chatBox.style.display = "flex"; // show popup
-        chatButton.style.display = "none"; // hide button
+        chatBox.style.display = "flex";
+        chatButton.style.display = "none";
     });
 
     closeChat.addEventListener("click", () => {
-        chatBox.style.display = "none"; // hide popup
-        chatButton.style.display = "flex"; // show button
+        chatBox.style.display = "none";
+        chatButton.style.display = "flex";
     });
 </script>
+
 </body>
 </html>
+
 
 
