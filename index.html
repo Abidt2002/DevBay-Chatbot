@@ -1,53 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DevBay Chatbot</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevBay Chatbot</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  
+  <!-- Chatbot Button -->
+  <div id="chatbot-btn">💬</div>
 
-<!-- Floating Chat Button -->
-<div id="chat-button">
-    <img src="chat-icon.png" alt="Chat" style="width:40px;height:40px;">
-</div>
-
-<!-- Chat Popup -->
-<div id="chat-box">
+  <!-- Chatbot Popup -->
+  <div id="chatbot-container">
     <div id="chat-header">
-        DevBay Assistant
-        <span id="close-chat">&#10005;</span>
+      <span>DevBay Assistant</span>
+      <span id="close-chat">✖</span>
     </div>
-    <div id="chat-body">
-        <!-- Messages will appear here -->
+    <div id="chat-body"></div>
+    <div id="chat-input">
+      <input type="text" id="userInput" placeholder="Type your question...">
+      <button id="sendBtn">Send</button>
     </div>
-    <div id="chat-input-container">
-        <input type="text" id="userInput" placeholder="Type your question...">
-        <button id="sendBtn">Send</button>
-    </div>
-</div>
+  </div>
 
-<script src="script.js"></script>
-<script>
-    // Popup open/close logic
-    const chatButton = document.getElementById("chat-button");
-    const chatBox = document.getElementById("chat-box");
-    const closeChat = document.getElementById("close-chat");
-
-    chatButton.addEventListener("click", () => {
-        chatBox.style.display = "flex";
-        chatButton.style.display = "none";
-    });
-
-    closeChat.addEventListener("click", () => {
-        chatBox.style.display = "none";
-        chatButton.style.display = "flex";
-    });
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
