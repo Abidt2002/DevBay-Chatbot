@@ -7,15 +7,51 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="chatContainer">
-        <h2>DevBay Chatbot</h2>
-        <div id="chatBox" class="chatBox"></div>
-        <div class="inputContainer">
-            <input type="text" id="userInput" placeholder="Ask about DevBay...">
-            <button id="sendBtn">Send</button>
-        </div>
+
+<!-- ========================
+     Floating Chat Button
+======================== -->
+<div id="chat-button">
+    <img src="chat-icon.png" alt="Chat">
+</div>
+
+<!-- ========================
+     Chat Popup
+======================== -->
+<div id="chat-box">
+    <div id="chat-header">
+        DevBay Assistant
+        <span id="close-chat">&#10005;</span>
     </div>
-    <script src="script.js"></script>
+    <div id="chat-body" class="chat-body">
+        <!-- Messages will appear here -->
+    </div>
+    <div id="chat-input-container">
+        <input type="text" id="chat-input" placeholder="Type your question...">
+        <button id="send-btn">Send</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    // ========================
+    // Popup open/close logic
+    // ========================
+    const chatButton = document.getElementById("chat-button");
+    const chatBox = document.getElementById("chat-box");
+    const closeChat = document.getElementById("close-chat");
+
+    chatButton.addEventListener("click", () => {
+        chatBox.style.display = "flex"; // show popup
+        chatButton.style.display = "none"; // hide button
+    });
+
+    closeChat.addEventListener("click", () => {
+        chatBox.style.display = "none"; // hide popup
+        chatButton.style.display = "flex"; // show button
+    });
+</script>
 </body>
 </html>
+
 
