@@ -7,7 +7,7 @@ function toggleChat() {
 // Full QA dataset
 const data = [
     // ------------------- Company Overview -------------------
-    ["What is DevBay?", "DevBay is a full-service IT and AI solutions company providing Web, App, and Software development, ERP, CRM, and cloud-based solutions to global clients."],
+    ["What is DevBay?", "DevBay is a full-service IT and AI solutions company dedicated to transforming businesses through innovation, technology, and intelligent systems. With expertise in Web, App, and Software Development, as well as Cloud Solutions, Data Analytics, and Cybersecurity, we deliver end-to-end digital transformation for clients across the globe."],
     ["Where is DevBay located?", "Headquarters in Karachi & Islamabad; serving clients in UAE, USA, Canada, Saudi Arabia."],
     ["Who is the CEO of DevBay?", "CEO: Azam Khan, COO: Arham Hashmi — leaders in technology and innovation."],
     ["What is DevBay mission?", "Devbay was founded with a vision to build revolutionary technology applications capable of significantly enhancing efficiency through automation and seamless customer engagement."],
