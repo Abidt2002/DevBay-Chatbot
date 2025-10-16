@@ -107,34 +107,50 @@ function typeAnswer(text, element) {
 }
 
 // ========================
-// DOM Interaction
+// DOM Elements
 // ========================
-const inputBox = document.getElementById("userInput");
-const submitBtn = document.getElementById("sendBtn");
-const chatBox = document.getElementById("chatBox");
+const chatBox = document.getElementById("chat-body");
+const chatInput = document.getElementById("chat-input");
+const sendBtn = document.getElementById("send-btn");
+const chatPopup = document.getElementById("chat-box");
+const chatButton = document.getElementById("chat-button");
+const closeChat = document.getElementById("close-chat");
 
-submitBtn.addEventListener("click", () => {
-    const userText = inputBox.value.trim();
+// ========================
+// Open / Close Chat
+// ========================
+chatButton.addEventListener("click", () => chatPopup.style.display = "flex");
+closeChat.addEventListener("click", () => chatPopup.style.display = "none");
+
+// ========================
+// Send Message Handler
+// ========================
+function sendMessage() {
+    const userText = chatInput.value.trim();
     if (!userText) return;
 
     // Show user message
     const userDiv = document.createElement("div");
-    userDiv.className = "userMsg";
+    userDiv.classList.add("user-msg");
     userDiv.textContent = userText;
     chatBox.appendChild(userDiv);
 
-    // Find and show answer
+    // Find best matching answer
     const answerText = findAnswer(userText);
+
+    // Show bot message with typewriter effect
     const botDiv = document.createElement("div");
-    botDiv.className = "botMsg";
+    botDiv.classList.add("bot-msg");
     chatBox.appendChild(botDiv);
     typeAnswer(answerText, botDiv);
 
-    inputBox.value = "";
+    // Clear input and scroll
+    chatInput.value = "";
     chatBox.scrollTop = chatBox.scrollHeight;
-});
+}
 
-inputBox.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") submitBtn.click();
+// Event listeners
+sendBtn.addEventListener("click", sendMessage);
+chatInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
 });
-
