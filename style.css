@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   background: linear-gradient(180deg, #0f172a, #1e293b);
   color: #f8fafc;
   display: flex;
@@ -11,9 +11,9 @@ body {
 
 .chat-container {
   width: 90%;
-  max-width: 650px;
+  max-width: 600px;
   background: #1e293b;
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 0 5px 20px rgba(0,0,0,0.4);
   padding: 20px;
   display: flex;
@@ -85,4 +85,5 @@ h1 {
 #send-btn:hover {
   background: #0ea5e9;
 }
+
 
