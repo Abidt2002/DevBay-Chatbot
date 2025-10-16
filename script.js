@@ -82,35 +82,160 @@ const data = [
     ["Do ready-made systems include AI?", "Yes, dashboards, chatbots, predictive reports."],
     ["How long does deployment take?", "3–10 business days depending on customization."],
 ];
+/* script.js
+   Default: client-side word-by-word animation.
+   Optional: streamingFromServer() shows how to read a streaming response (requires server).
+*/
 
-// Find best answer (simple fuzzy)
-function findAnswer(question) {
-    const q = question.toLowerCase();
-    for (let [key, val] of data) {
-        if (key.toLowerCase() === q || key.toLowerCase().includes(q) || q.includes(key.toLowerCase())) return val;
+const chatArea = document.getElementById('chatArea');
+const form = document.getElementById('inputForm');
+const userInput = document.getElementById('userInput');
+const modeName = document.getElementById('modeName');
+
+/* Set mode:
+   'client'  => use existing full-response string and animate it (works on GH Pages)
+   'stream'  => try to stream from a server endpoint (requires backend supporting streaming)
+*/
+const MODE = 'client'; // change to 'stream' to use streamingFromServer (if you have backend)
+modeName.textContent = MODE === 'stream' ? 'streaming from server' : 'client-side animation';
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = userInput.value.trim();
+  if(!text) return;
+  appendMessage(text, 'user');
+  userInput.value = '';
+  // show bot placeholder
+  const botBubble = appendMessage('', 'bot', true);
+
+  if(MODE === 'client'){
+    // Option A (recommended for GitHub Pages): get final bot text somehow (from local logic or an API that returns full string)
+    // Example: you already have a function getBotFinalResponse(userText) that returns the full final response string.
+    // For demo I will use a fake reply generator - replace with your actual reply fetch.
+    const finalReply = await demoGetBotFinalResponse(text); // returns full final reply string
+    // animate word-by-word into the botBubble
+    await animateWords(botBubble, finalReply, {perWordDelay: 120, newLineEverySentence: true});
+    botBubble.classList.remove('typing-cursor');
+  } else {
+    // Option B: streaming from server (only if your server endpoint streams text chunks).
+    try {
+      await streamingFromServer('/api/stream-chat', text, botBubble);
+      botBubble.classList.remove('typing-cursor');
+    } catch (err) {
+      console.error('Streaming failed', err);
+      botBubble.textContent = "Sorry — streaming failed.";
+      botBubble.classList.remove('typing-cursor');
     }
-    for (let [key, val] of data) {
-        const words = key.toLowerCase().split(" ");
-        if (words.some(w => q.includes(w))) return val;
-    }
-    return "Sorry, I don't have information on that. Ask about DevBay services, projects, or ready-made solutions.";
+  }
+
+  scrollChatToBottom();
+});
+
+/* Helper to append a message bubble. If typing is true, show animated cursor. */
+function appendMessage(text='', who='bot', typing=false){
+  const div = document.createElement('div');
+  div.className = `message ${who}` + (typing ? ' typing-cursor' : '');
+  div.textContent = text;
+  chatArea.appendChild(div);
+  scrollChatToBottom();
+  return div;
 }
 
-// Send message
-function sendMessage() {
-    const input = document.getElementById("chat-input");
-    const messages = document.getElementById("chat-messages");
-    const userMsg = input.value.trim();
-    if (!userMsg) return;
-
-    const userDiv = document.createElement("div");
-    userDiv.innerHTML = `<strong>You:</strong> ${userMsg}`;
-    messages.appendChild(userDiv);
-
-    const botDiv = document.createElement("div");
-    botDiv.innerHTML = `<strong>Bot:</strong> ${findAnswer(userMsg)}`;
-    messages.appendChild(botDiv);
-
-    messages.scrollTop = messages.scrollHeight;
-    input.value = "";
+/* Scroll helper */
+function scrollChatToBottom(){
+  chatArea.scrollTop = chatArea.scrollHeight;
 }
+
+/* Sleep util */
+function sleep(ms){ return new Promise(res => setTimeout(res, ms)); }
+
+/* Animate finalText into container word-by-word.
+   options: { perWordDelay: number(ms), newLineEverySentence: bool, perWordCallback(optional) }
+*/
+async function animateWords(container, finalText, options={}) {
+  const perWordDelay = options.perWordDelay ?? 80;
+  const newLineEverySentence = options.newLineEverySentence ?? false;
+
+  // split into words but keep punctuation attached
+  const words = finalText.split(/\s+/);
+  container.textContent = ''; // clear
+  container.classList.add('typing-cursor');
+
+  for(let i=0; i<words.length; i++){
+    const w = words[i];
+    // append word and a space (or newline after sentence if requested)
+    if(newLineEverySentence && /[.!?]$/.test(w)){
+      // word ends with sentence punctuation -> append word then newline
+      container.textContent += w;
+      // force a small pause then add newline
+      await sleep(perWordDelay + 80);
+      container.textContent += '\n\n';
+    } else {
+      container.textContent += (container.textContent ? ' ' : '') + w;
+    }
+    scrollChatToBottom();
+    await sleep(perWordDelay);
+  }
+  container.classList.remove('typing-cursor');
+}
+
+/* DEMO: returns a generated reply string (replace with your own fetch to a server or local logic) */
+async function demoGetBotFinalResponse(userText){
+  // small simulated thinking delay
+  await sleep(350);
+  // this demo reply — replace with an actual API call that returns the whole reply as text
+  return `Sure — here's how we did it. First, we set up the chat UI in HTML. Then we added style in CSS to make bubbles. Finally, the script animates the reply word by word so you can watch it appear.`;
+}
+
+/* Example: streaming-from-server implementation (requires server streaming).
+   The server must stream plain text chunks (e.g., SSE or chunked HTTP). This function tries to read from Response.body.
+   Note: DO NOT expose secret keys in client-side code. Put keys on the server.
+*/
+async function streamingFromServer(url, userText, botBubble){
+  botBubble.textContent = '';
+  botBubble.classList.add('typing-cursor');
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({message: userText})
+  });
+
+  if(!res.ok) throw new Error('Network response not ok: ' + res.status);
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let done = false;
+  let accumulated = '';
+
+  while(!done){
+    const {value, done: doneReading} = await reader.read();
+    done = doneReading;
+    if(value){
+      const chunk = decoder.decode(value, {stream: true});
+      // chunk may be partial; append directly so user sees it as it comes.
+      // To make it appear word-by-word while streaming, you can buffer then break into words:
+      accumulated += chunk;
+      // we'll flush only full words to avoid splitting mid-word
+      const parts = accumulated.split(/\s+/);
+      // keep last partial word in buffer
+      const lastPartial = parts.pop();
+      // display all complete words so far
+      if(parts.length){
+        // append them joined by spaces to the bubble
+        const toAdd = (botBubble.textContent ? ' ' : '') + parts.join(' ');
+        botBubble.textContent += toAdd;
+        scrollChatToBottom();
+      }
+      accumulated = lastPartial || '';
+    }
+  }
+
+  // flush what's left
+  if(accumulated){
+    botBubble.textContent += (botBubble.textContent ? ' ' : '') + accumulated;
+  }
+}
+
+/* OPTIONAL: If you want character-by-character instead of word-by-word,
+   you can implement animateChars(container, text, delay) similarly. */
