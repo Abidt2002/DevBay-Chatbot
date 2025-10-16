@@ -70,7 +70,7 @@ const data = [
     ["Does DevBay SMS support parent portals?", "Yes, parents can view attendance, grades, announcements."],
     ["Does DevBay SMS include fee management?", "Yes, automated fee collection and reporting."],
     ["Can DevBay SMS manage teacher performance?", "Yes, performance analytics available."],
-    ["What is DevBay Property Management System?", "Tenants, leases, rent, maintenance, tenant portals, cloud-based."],
+    ["What is DevBay Property Management System?", "Built for property owners, real estate agencies, and facility managers, DevBay PMS enhances transparency, reduces manual effort, and improves operational efficiency. With smart dashboards, automated reminders, and real-time insights, managing multiple properties becomes effortless and organized. At DevBay, we deliver intelligent property management systems that help you save time, maximize returns, and grow with confidence."],
     ["Can DevBay PMS handle rent invoices?", "Yes, auto-generates invoices and receipts."],
     ["Does DevBay PMS support tenant portals?", "Yes, tenants can view rent history and submit requests."],
     ["Is DevBay PMS cloud-based?", "Yes, accessible from anywhere."],
